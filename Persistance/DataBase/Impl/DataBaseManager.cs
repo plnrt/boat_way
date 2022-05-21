@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Persistance.DataBaseManager;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Persistance.Repository.Impl
+namespace Persistance.DataBase.Impl
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class DataBaseManager<T> : IDataBaseManager<T> where T : class
     {
         private DbContext Context;
         private DbSet<T> DbSet;
-        public Repository(DbContext context)
+        public DataBaseManager(DbContext context)
         {
             this.Context = context;
             DbSet = context.Set<T>();
@@ -22,10 +22,10 @@ namespace Persistance.Repository.Impl
             DbSet.Add(Entity);
             await Context.SaveChangesAsync();
         }
-        public async Task Delete(int Id)
+        public async Task Delete(string Id)
         {
             DbSet.Remove(DbSet.Find(Id));
-            Context.SaveChangesAsync();
+            await Context.SaveChangesAsync().ConfigureAwait(false);
         }
         public async Task Delete(T Entity)
         {
@@ -35,9 +35,9 @@ namespace Persistance.Repository.Impl
         public async Task Clear()
         {
             DbSet.RemoveRange(DbSet);
-            Context.SaveChangesAsync();
+            await Context.SaveChangesAsync().ConfigureAwait(false);
         }
-        public async Task Modify(int Id, T NewItem)
+        public async Task Modify(string Id, T NewItem)
         {
             Context.Entry(Context.Set<T>().Find(Id)).CurrentValues.SetValues(NewItem);
             Context.SaveChangesAsync();
@@ -48,7 +48,7 @@ namespace Persistance.Repository.Impl
             GC.SuppressFinalize(this);
         }
 
-        public async Task<T> Get(int Id)
+        public async Task<T> Get(string Id)
         {
             return await DbSet.FindAsync(Id).ConfigureAwait(false);
         }

@@ -1,16 +1,18 @@
+using Business.ResumeManager;
+using Business.ResumeManager.Impl;
+using Business.UserManager;
+using Business.UserManager.Impl;
+using Business.VacancyManager;
+using Business.VacancyManager.Impl;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Persistance.DataBaseManager;
+using System.Data.Entity;
+using System.Reflection;
 
 namespace boat_way
 {
@@ -23,18 +25,19 @@ namespace boat_way
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "boat_way", Version = "v1" });
             });
+            services.AddScoped<IVacancyManager, VacancyManager>();
+            services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<IResumeManager, ResumeManager>();
+            services.AddAllGenericTypes(typeof(IDataBaseManager<>), new[] { typeof(DbContext).GetTypeInfo().Assembly });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -45,11 +48,8 @@ namespace boat_way
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

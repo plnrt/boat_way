@@ -5,19 +5,20 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Persistance.Repository
+namespace Persistance.DataBaseManager
 {
-    public interface IRepository<T>
+    public interface IDataBaseManager<T>
     {
         Task Add(T Entity);
-        Task Delete(int Id);
+        Task Delete(string Id);
         Task Delete(T Entity);
         Task Clear();
-        Task Modify(int Id, T NewItem);
-        Task<T> Get(int Id);
+        Task Modify(string Id, T NewItem);
+        Task<T> Get(string Id);
         Task<T> GetByPosition(int Position);
         List<T> GetAll();
         List<T> GetAll(params Expression<Func<T, object>>[] includeProperties);
         List<T> GetAll(Func<T, bool> predicate, params Expression<Func<T, object>>[] includeProperties);
+        void Dispose();
     }
 }
