@@ -36,7 +36,10 @@
 .builds
 *.build.csdef
 *.dotCover
-
+*.cache
+*.props
+*.targets
+*.editorconfig
 # Visual Studio profiler
 *.psess
 *.vsp
