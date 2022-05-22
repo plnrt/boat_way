@@ -19,6 +19,6 @@ namespace Business.VacancyManager
 
         Task DeleteAll();
 
-        Task<Vacancy> Get();
+        Task<Vacancy> Get(string Id);
     }
 }

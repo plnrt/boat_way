@@ -8,5 +8,6 @@ namespace Common.Entity
 {
     public class Resume : BaseEntity
     {
+        public string Descritpion { get; set; }
     }
 }

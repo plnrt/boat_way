@@ -19,6 +19,6 @@ namespace Business.ResumeManager
 
         Task DeleteAll();
         
-        Task<Resume> Get();
+        Task<Resume> Get(string Id);
     }
 }

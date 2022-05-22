@@ -1,4 +1,5 @@
 ﻿using Common.Entity;
+using Persistance.Contexts;
 using Persistance.DataBaseManager;
 using System;
 using System.Collections.Generic;
@@ -20,38 +21,32 @@ namespace Business.ResumeManager.Impl
         {
             resume.Id = Guid.NewGuid().ToString();
             resume.Created = DateTime.Now;
-            await this.DataBaseManage.Add(resume).ConfigureAwait(false);
+            await this.DataBaseManage.Add(new DatabaseContext(), resume).ConfigureAwait(false);
         }
 
         public async Task Delete(string id)
         {
-            await this.DataBaseManage.Delete(id).ConfigureAwait(false);
-            throw new NotImplementedException();
+            await this.DataBaseManage.Delete(new DatabaseContext(), id).ConfigureAwait(false);
         }
 
         public async Task DeleteAll()
         {
-            await this.DataBaseManage.Clear().ConfigureAwait(false);
+            await this.DataBaseManage.Clear(new DatabaseContext()).ConfigureAwait(false);
         }
 
         public async Task<Resume> Get(string Id)
         {
-            return await this.DataBaseManage.Get(Id).ConfigureAwait(false);
-        }
-
-        public Task<Resume> Get()
-        {
-            throw new NotImplementedException();
+            return await this.DataBaseManage.Get(new DatabaseContext(), Id).ConfigureAwait(false);
         }
 
         public List<Resume> GetAll()
         {
-            return this.DataBaseManage.GetAll();
+            return this.DataBaseManage.GetAll(new DatabaseContext());
         }
 
         public async Task Update(string Id,Resume resume)
         {
-            await this.DataBaseManage.Modify(Id , resume).ConfigureAwait(false);
+            await this.DataBaseManage.Modify(new DatabaseContext(), Id , resume).ConfigureAwait(false);
         }
     }
 }

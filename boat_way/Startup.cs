@@ -4,12 +4,15 @@ using Business.UserManager;
 using Business.UserManager.Impl;
 using Business.VacancyManager;
 using Business.VacancyManager.Impl;
+using Common.Entity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Persistance.DataBase.Impl;
 using Persistance.DataBaseManager;
 using System.Data.Entity;
 using System.Reflection;
@@ -32,10 +35,16 @@ namespace boat_way
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "boat_way", Version = "v1" });
             });
-            services.AddScoped<IVacancyManager, VacancyManager>();
-            services.AddScoped<IUserManager, UserManager>();
-            services.AddScoped<IResumeManager, ResumeManager>();
-            services.AddAllGenericTypes(typeof(IDataBaseManager<>), new[] { typeof(DbContext).GetTypeInfo().Assembly });
+
+            services.AddSingleton(typeof(IDataBaseManager<>), typeof(DataBaseManager<>));
+
+            //services.Add(typeof(IDataBaseManager<>), typeof(DataBaseManager<>), ServiceLifetime.Scoped);
+            services.AddTransient<IVacancyManager, VacancyManager>();
+            services.AddTransient<IUserManager, UserManager>();
+            services.AddTransient<IResumeManager, ResumeManager>();
+
+
+            //services.AddScoped<IConnectionService, ConnectionService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
