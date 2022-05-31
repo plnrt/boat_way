@@ -36,5 +36,24 @@ namespace Business.UserManager.Impl
         {
             await this.DataBaseManage.Modify(new DatabaseContext(), Id, user).ConfigureAwait(false);
         }
+
+        public User Login(string Login, string Password)
+        {
+            var users = this.DataBaseManage.GetAll(new DatabaseContext());
+            var currentUser = users.FirstOrDefault(e => e.Password == Password && e.Login == Login);
+            if (currentUser == null)
+            {
+                throw new InvalidLoginPasswordException("Invalid login");
+            }
+            if (!String.Equals(currentUser.Password, Password))
+            {
+                throw new InvalidLoginPasswordException("Invalid password");
+            }
+            return currentUser;
+        }
+    }
+    public class InvalidLoginPasswordException : Exception
+    {
+        public InvalidLoginPasswordException(string Message) : base(Message) { }
     }
 }

@@ -16,5 +16,7 @@ namespace Business.UserManager
         Task Delete(string Id);
 
         Task<User> Get(string Id);
+
+        User Login(string Login, string Password);
     }
 }

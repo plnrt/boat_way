@@ -32,6 +32,13 @@ namespace boat_way.Controllers
         }
 
         [HttpGet]
+        [Route("login")]
+        public User Login(string login, string password)
+        {
+            return this.userManager.Login(login, password);
+        }
+
+        [HttpGet]
         [Route("getallresumes")]
         public IEnumerable<Resume> GetResumes()
         {
@@ -42,7 +49,9 @@ namespace boat_way.Controllers
         [Route("getresume")]
         public async Task<Resume> GetResume(string Id)
         {
-            return await this.resumeManager.Get(Id).ConfigureAwait(false);
+          
+            var result = await this.resumeManager.Get(Id).ConfigureAwait(false);
+            return result;
         }
 
         [HttpDelete]

@@ -37,14 +37,9 @@ namespace boat_way
             });
 
             services.AddSingleton(typeof(IDataBaseManager<>), typeof(DataBaseManager<>));
-
-            //services.Add(typeof(IDataBaseManager<>), typeof(DataBaseManager<>), ServiceLifetime.Scoped);
             services.AddTransient<IVacancyManager, VacancyManager>();
             services.AddTransient<IUserManager, UserManager>();
             services.AddTransient<IResumeManager, ResumeManager>();
-
-
-            //services.AddScoped<IConnectionService, ConnectionService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
